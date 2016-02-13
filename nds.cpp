@@ -58,7 +58,6 @@
 
 */
 
-#include <windows.h>
 #include <idaldr.h>
 #include "nds.h"
 
@@ -178,7 +177,7 @@ void load_file(linput_t *li, ushort /*neflag*/, const char * /*fileformatname*/)
 		startEA = hdr.arm9_ram_address;
 		endEA = hdr.arm9_ram_address + hdr.arm9_size;
 		offset = hdr.arm9_rom_offset;
-		ARM9 = TRUE;
+		ARM9 = true;
 		// sanitycheck
 		if (qlsize(li) < offset+hdr.arm9_size)
       {
@@ -194,7 +193,7 @@ void load_file(linput_t *li, ushort /*neflag*/, const char * /*fileformatname*/)
 		startEA = hdr.arm7_ram_address;
 		endEA = hdr.arm7_ram_address + hdr.arm7_size;
 		offset = hdr.arm7_rom_offset;
-		ARM9 = FALSE;
+		ARM9 = false;
 		// sanitycheck
 		if(qlsize(li) < offset+hdr.arm7_size)
       {
@@ -203,11 +202,11 @@ void load_file(linput_t *li, ushort /*neflag*/, const char * /*fileformatname*/)
 	}
 	
 	// check if segment lies within legal RAM blocks
-	found_mem_block = FALSE;
+	found_mem_block = false;
    for(i = 0; i < sizeof(memory) / sizeof(MEMARRAY); i++) {
       if(startEA >= memory[i].start || endEA <= memory[i].end) 
       {
-         found_mem_block = TRUE;
+         found_mem_block = true;
          break;
       }
    }
@@ -234,18 +233,18 @@ void load_file(linput_t *li, ushort /*neflag*/, const char * /*fileformatname*/)
 	// load file into RAM area
 	file2base(li, offset, startEA, endEA, FILEREG_PATCHABLE);
 	
-   entry_point = ARM9 == TRUE ? hdr.arm9_entry_address : hdr.arm7_entry_address;
+   entry_point = ARM9 == true ? hdr.arm9_entry_address : hdr.arm7_entry_address;
 
 	// add additional information about the ROM to the database
 	describe(startEA, true, ";   Created with NDS Loader %s.\n", version);
 	describe(startEA, true, ";   Author 1:           dennis@backtrace.de");
 	describe(startEA, true, ";   Author 2:           hitchhikr@australia.edu\n");
 	describe(startEA, true, ";   Game Title:         %s\n", hdr.title);
-	describe(startEA, true, ";   Processor:          ARM%c", ARM9 == TRUE ? '9' : '7');
+	describe(startEA, true, ";   Processor:          ARM%c", ARM9 == true ? '9' : '7');
 	describe(startEA, true, ";   ROM Header size:    0x%08X", hdr.headerSize);
 	describe(startEA, true, ";   Header CRC:         0x%04X\n", hdr.headerCRC16);
-	describe(startEA, true, ";   Offset in ROM:      0x%08X", ARM9 == TRUE ? hdr.arm9_rom_offset : hdr.arm7_rom_offset);
-	describe(startEA, true, ";   Array:              0x%08X - 0x%08X (%d bytes)", startEA, endEA, ARM9 == TRUE ? hdr.arm9_size : hdr.arm7_size);
+	describe(startEA, true, ";   Offset in ROM:      0x%08X", ARM9 == true ? hdr.arm9_rom_offset : hdr.arm7_rom_offset);
+	describe(startEA, true, ";   Array:              0x%08X - 0x%08X (%d bytes)", startEA, endEA, ARM9 == true ? hdr.arm9_size : hdr.arm7_size);
 	describe(startEA, true, ";   Entry point:        0x%08X\n", entry_point);
 
 	describe(startEA, true, ";   --- Beginning of ROM content ---", NULL);
